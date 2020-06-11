@@ -8,7 +8,7 @@ public:
 	~Particle();
 
 	//start particle
-	void setup(ofVec2f emitterPos);
+	void setup(ofVec2f emitterPos, bool variante);
 	//recalculate 
 	void update(float timestep);
 	//draw particle
@@ -39,5 +39,7 @@ private:
 
 	//soll partikel zerstört werden?
 	bool toBeKilled;
+
+	
 };
 

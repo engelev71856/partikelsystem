@@ -15,12 +15,15 @@ Particle::~Particle()
 
 //-------------------------------------------------------------------
 
-void Particle::setup(ofVec2f emitterPos)
+void Particle::setup(ofVec2f emitterPos, bool variante)
 {
 	pos.x = emitterPos.x;
 	pos.y = emitterPos.y;
-	vel.x = ofRandom(-0.1, 0.2);
-	vel.y = ofRandom(-0.1, 0.2);
+	//constexpr die zu compilierzeit bekannt sein muss
+	const float faktorVel = variante ? 0.2 : 0.1;
+
+	vel.x = ofRandom(-0.1, 0.1) * faktorVel;
+	vel.y = ofRandom(-0.1, 0.1) * faktorVel;
 	lifetime = 2000;
 	age = 0;
 	color = ofColor::red;

@@ -2,6 +2,8 @@
 #include "ofMain.h"
 #include "particle.h"
 #include "ofPixels.h"
+#include "ofxGui.h"
+#include <random>
 
 
 class ParticleSystem
@@ -14,7 +16,8 @@ public:
 	void update();
 	void draw();
 
-
+	ofxPanel gui;
+	
 private:
 
 	vector<Particle*> particles;
@@ -29,5 +32,15 @@ private:
 	float timestep;
 
 	ofImage dotsPicture;
+	ofImage falsePicture;
+
+	ofParameter<bool> activateSystem;
+	ofParameterGroup parameterGroup;
+
+	vector<ofVec2f> dotsEmitterList;
+	vector<ofVec2f> falseEmitterList;
+
+	default_random_engine generator;
+
 };
 
