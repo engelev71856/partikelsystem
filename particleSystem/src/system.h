@@ -15,6 +15,7 @@ public:
 	void setup();
 	void update();
 	void draw();
+	
 
 	ofxPanel gui;
 	
@@ -41,6 +42,30 @@ private:
 	vector<ofVec2f> falseEmitterList;
 
 	default_random_engine generator;
+
+	class Knoten {
+	public:
+		ofVec2f pos;
+		int ebene; //radiusebene
+		/*Knoten *parent = NULL;
+		int childcount = 0;*/
+	};
+	vector<Knoten> knoten;
+	static constexpr float knotenradius = 16;
+	static constexpr int ebenenanzahl = 3;
+	
+
+	struct Ebene {
+		struct Knoten {
+			ofVec2f pos;
+			Knoten *parent = NULL;
+			/*int childcount = 0;*/
+			vector<Knoten*> children;
+		};
+		vector<Knoten> knoten;
+	};
+	vector<Ebene> ebenen;
+
 
 };
 

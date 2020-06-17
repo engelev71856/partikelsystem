@@ -1,7 +1,7 @@
 ﻿  system.cpp
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(69): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(95): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(185): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(128): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(135): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(204): warning C4018: '<': signed/unsigned mismatch
   particleSystem.vcxproj -> C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\apps\myApps\particleSystem\bin\particleSystem_debug.exe
   
   	                   2	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\libs\fmodex\lib\vs\Win32\

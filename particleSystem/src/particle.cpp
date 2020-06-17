@@ -24,7 +24,7 @@ void Particle::setup(ofVec2f emitterPos, bool variante)
 
 	vel.x = ofRandom(-0.1, 0.1) * faktorVel;
 	vel.y = ofRandom(-0.1, 0.1) * faktorVel;
-	lifetime = 2000;
+	lifetime = 20000;
 	age = 0;
 	color = ofColor::red;
 	size = 1;
@@ -42,7 +42,7 @@ void Particle::update(float timestep)
 
 	//Update pos
 	pos += vel * timestep; // geschwindigkeit gibt gleichzeitig die richtung an! neue 
-	vel *= 0.95; //vel * = 0.1 * textwert
+	vel *= 0.95; //vel * = 0.1 * textwert, Tiefpass erster Ordnung??
 
 	//update time and check if particle should die
 	age += timestep;
@@ -69,6 +69,11 @@ void Particle::update(float timestep)
 }
 
 //-------------------------------------------------------------------
+
+void Particle::updateVel(const ofVec2f & acc, float timestep)
+{
+	vel += acc * timestep;
+}
 
 void Particle::draw()
 {
@@ -103,4 +108,9 @@ int Particle::getPosY()
 {
 	int py = pos.y;
 	return py;
+}
+
+ofVec2f Particle::getPos() const
+{
+	return pos;
 }

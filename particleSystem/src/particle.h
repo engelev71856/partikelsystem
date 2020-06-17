@@ -12,6 +12,7 @@ public:
 	//recalculate 
 	void update(float timestep);
 	//draw particle
+	void updateVel(const ofVec2f &acc, float timestep);//änderung geschwindigkeitsvector
 	void draw();
 	float getAgeNorm();
 
@@ -19,7 +20,9 @@ public:
 
 	int getPosX();
 	int getPosY();
+	int ebene = 0; //Knoten Ebene Null wirken anziehend
 
+	ofVec2f getPos() const;
 
 private:
 	//Position
@@ -40,6 +43,7 @@ private:
 	//soll partikel zerstört werden?
 	bool toBeKilled;
 
+	
 	
 };
 
