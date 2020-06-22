@@ -1,0 +1,17 @@
+﻿  system.cpp
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(71): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(75): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(86): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(115): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(123): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(263): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\finalparticle\src\system.cpp(264): warning C4018: '<': signed/unsigned mismatch
+  finalParticle.vcxproj -> C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\apps\myApps\finalParticle\bin\finalParticle_debug.exe
+  
+  	                   2	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\libs\fmodex\lib\vs\Win32\
+  	  *EXTRA Datei		 6018560	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\apps\myApps\finalParticle\bin\FreeImage.dll
+  
+  	                   1	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\libs\FreeImage\lib\vs\Win32\
+  	  *EXTRA Datei		 1266176	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\apps\myApps\finalParticle\bin\fmodex.dll
+  	  *EXTRA Datei		 1312768	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\apps\myApps\finalParticle\bin\fmodexL.dll
