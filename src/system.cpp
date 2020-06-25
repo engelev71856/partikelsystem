@@ -168,6 +168,20 @@ vector<ofVec2f> ParticleSystem::image2List(ofImage* img)
 		}
 	}
 
+	/*for (vector<ofVec2f>::iterator itl = list.begin(); itl != list.end(); ++itl) {
+		list.x *= ofGetWidth() / 2;
+		list.y *= ofGetHeight() / 2;
+	}*/
+	if ((w < ofGetWidth()) && (h < ofGetHeight())) {
+		for (int i = 0; i < list.size(); i++) {
+			float calX = (ofGetWidth() - w) / 2;
+			float calY = (ofGetHeight() - h) / 2;
+			list[i].x += calX;
+			list[i].y += calY;
+		}
+	}
+
+
 	return list;
 }
 
@@ -175,82 +189,68 @@ vector<ofVec2f> ParticleSystem::image2List(ofImage* img)
 
 void ParticleSystem::generateAttractors(int numPaths, int numKnotsperPath)
 {
-
 	paths.clear();
 
-	//NOT CORRECT!!!
-	//calc stepsize
-	/*float deltaW = ofGetWidth() / numKnotsperPath;
-	float deltaH = ofGetHeight() / numKnotsperPath;*/
+	ofVec2f mid(ofGetWidth() / 2, ofGetHeight() / 2);
 
-	
-	//Vektor zur zum beliebigen Ring
-	/*ofVec2f ring;
-	const float vX = ofGetWidth() / 2 - ring.x;
-	const float vY = ofGetHeight() / 2  - ring.y;*/
-	
-	//Mittelpunkt als Vector mid gesetzt:
-	ofVec2f out(ofGetWidth(), ofGetHeight());
-	ofVec2f mid(0,0);
-	mid.middle(out);
-
-	//Vector von Mittelpunkt zum Outring
-	ofVec2f sum = out - mid;
-	
-	float oneX = sum.x / numKnotsperPath;
-	float oneY = sum.y / numKnotsperPath;
-	
 	for (int p = 0; p < numPaths; p++) {
 		vector<ofVec2f> knots;
+		ofVec2f endKnot;
+		ofVec2f endKnotA(10,10);
+		ofVec2f endKnotB(ofGetWidth()-10, 10);
+		ofVec2f endKnotC(10, ofGetHeight()-10);
+		ofVec2f endKnotD(ofGetWidth() - 10, ofGetHeight() - 10);
+
 		
-
 		for (int k = 0; k < numKnotsperPath; k++) {
-			//ofVec2f knot(ofRandom(k * deltaW, (k + 1) * deltaW), ofRandom(k * deltaH, (k + 1) * deltaH)); //generate point 		
-			//ofVec2f knot(ofRandom(k * oneX, (k + 1) * oneX), ofRandom(k * oneY, (k + 1) * one)); //generate point
 
+			int testPath = p % 4; 
 			
+			switch (testPath) {
+			case 0:
+				endKnot = ofVec2f(endKnotA);
+				break;
+			case 1:
+				endKnot = ofVec2f(endKnotB);
+				break;
+			case 2:
+				endKnot = ofVec2f(endKnotC);
+				break;
+			case 3:
+				endKnot = ofVec2f(endKnotD);
+				break;
+			default:
+				// ----
+				break;
+			}
 
-			//generieren der ringe:
+
+			//generieren der Abstände:
 			float iteration = float(k) / float(numKnotsperPath);
 
-			//punkt auf Geraden zwischen out und mid Mit der Gewichtung von interation  
-			//knot position auf einer Linie 
-			ofVec2f steps = (mid.getInterpolated(out, iteration));
+			ofVec2f midToEndKnot((endKnot.x - mid.x),(endKnot.y - mid.y));
 
-			float angle = float(360) / float(numPaths);
-			angle = ((p * angle) + ofRandom(-10,30));
+			ofVec2f step((midToEndKnot.x * iteration),(midToEndKnot.y * iteration));
 
-		
-			steps.rotate(angle, mid);
+			ofVec2f knot(mid.x + step.x, mid.y + step.y);
 
-			float iteration2 = float(k-1) / float(numKnotsperPath);
-			ofVec2f steps2 = (mid.getInterpolated(out, iteration2));
-			float angle2 = ofRandom(10,90);
-			steps2.rotate(angle, mid);
-			float randomIteration = ofRandom(0.1,0.9);
-			ofVec2f turn = (steps2.getInterpolated(steps, randomIteration));
-			turn.rotate(angle2, steps2);
-			//getting values
-			float dX = turn.x;
-			float dY = turn.y;
-			//getting values for first knot 
-			float aX = steps.x;
-			float aY = steps.y;
-
-			if (k == 0) {
-				//generate point
-				ofVec2f knot(aX, aY);
-				knots.push_back(knot);// add point to path
+			if (k < numKnotsperPath) {
+				knot.x = knot.x + ofRandom(-40, 90);
+				knot.y = knot.y + ofRandom(-40, 90);
 			}
-			else {
-				//generate point
-				ofVec2f knot(dX, dY);
-				knots.push_back(knot);// add point to path
-			}
-		
+			knots.push_back(knot);
 		}
-		
-		paths.push_back(knots); // add path to all paths
+		paths.push_back(knots); 
+
+		//copy path for branching
+		vector<ofVec2f> pathsplit;
+		pathsplit = paths[p];
+		//
+		for (int k = ((numKnotsperPath /2) + 1 ); k >= ((numKnotsperPath /2) + 1) && k < numKnotsperPath; k++) {
+			pathsplit[k].x = pathsplit[k].x + ofRandom(-120, 160);
+			pathsplit[k].y = pathsplit[k].y + ofRandom(-120, 160);
+		}
+		paths.push_back(pathsplit);	
 	}
 
 	for (int r = 0; r < paths.size(); r++) { //print all paths
@@ -258,7 +258,4 @@ void ParticleSystem::generateAttractors(int numPaths, int numKnotsperPath)
 			cout << "path: " << r << " knot: " << k << " x: " << paths[r][k].x << " y: " << paths[r][k].y << endl;
 		}
 	}
-
-
-
 }

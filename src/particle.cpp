@@ -29,7 +29,7 @@ void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime, int path
 
 	this->lifetime = lifetime * 1000;
 	age = 0;
-	color = ofColor::magenta;
+	color = ofColor(155,48,255);
 	color.a = 127;
 	size = 2;
 	toBeKilled = false;
@@ -54,6 +54,15 @@ void Particle::update(float timestep, float ratio, float distanceThreshold)
 	//check if distance to current attractor is under threshold
 	if ((attractor - pos).length() < distanceThreshold) {
 		wantNextAttractor = true;
+	}
+
+	if (knotId == 3) {
+		color = ofColor(126, 192, 238);
+		color.a = 100;
+	}
+	if (knotId == 5) {
+		color = ofColor(0, 255, 255);
+		color.a = 70;
 	}
 
 
