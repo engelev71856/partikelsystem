@@ -15,55 +15,64 @@ Particle::~Particle()
 
 //-------------------------------------------------------------------
 
-void Particle::setup(ofVec2f emitterPos, bool variante)
+void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime, int pathId)
 {
 	pos.x = emitterPos.x;
 	pos.y = emitterPos.y;
-	//constexpr die zu compilierzeit bekannt sein muss
-	const float faktorVel = variante ? 0.2 : 0.1;
 
-	vel.x = ofRandom(-0.1, 0.1) * faktorVel;
-	vel.y = ofRandom(-0.1, 0.1) * faktorVel;
-	lifetime = 2000;
+	attractor = pos;
+	
+	this->speedRange = speed;
+	this->speed = ofRandom(speed.x, speed.y);
+
+	vel = ofVec2f(ofRandomf() * this->speed, ofRandomf() * this->speed);
+
+	this->lifetime = lifetime * 1000;
 	age = 0;
-	color = ofColor::red;
-	size = 1;
+	color = ofColor::magenta;
+	color.a = 127;
+	size = 2;
+	toBeKilled = false;
 
+	this->pathId = pathId;
+	knotId = 0;
 }
 
 //-------------------------------------------------------------------
 
-void Particle::update(float timestep)
+void Particle::update(float timestep, float ratio, float distanceThreshold)
 {
-
-	//UPDATE POSITION
-	//UPDATE VELOCITY
-	//ALTE PARTIKEL ENTFERNEN
-
 	//Update pos
 	pos += vel * timestep; // geschwindigkeit gibt gleichzeitig die richtung an! neue 
-	vel *= 0.95; //vel * = 0.1 * textwert
+
+	//calculate new direction with ratio between old and new direction
+	vel = ((vel.normalize() * ratio) + (attractor - pos).normalize() * (1 - ratio)).normalize() * speed;
 
 	//update time and check if particle should die
 	age += timestep;
 
-	//stay on screen
-	
+	//check if distance to current attractor is under threshold
+	if ((attractor - pos).length() < distanceThreshold) {
+		wantNextAttractor = true;
+	}
+
+
+	if (getAgeNorm() > 1) {
+		toBeKilled = true;
+	}
+
+	//kill if out of screen
 	if (pos.x > ofGetWidth()) {
-		pos.x = ofGetWidth();
-		vel.x *= -1.0;
+		toBeKilled = true;
 	}
 	else if (pos.x < 0) {
-		pos.x = 0;
-		vel.x *= -1.0;
+		toBeKilled = true;
 	}
 	if (pos.y > ofGetHeight()) {
-		pos.y = ofGetHeight();
-		vel.y *= -1.0;
+		toBeKilled = true;
 	}
 	else if (pos.y < 0) {
-		pos.y = 0;
-		vel.y *= -1.0;
+		toBeKilled = true;
 	}
 
 }
@@ -73,7 +82,7 @@ void Particle::update(float timestep)
 void Particle::draw()
 {
 	//ofSetColor(color);
-	ofSetColor(255, 63, 180);
+	ofSetColor(color);
 	ofDrawCircle(pos.x, pos.y, size);
 	ofSetColor(255);
 
@@ -85,22 +94,4 @@ void Particle::draw()
 float Particle::getAgeNorm()
 {
 	return age / lifetime;
-}
-
-void Particle::setVel(ofVec2f v)
-{
-	vel.x = v.x;
-	vel.y = v.y;
-}
-
-int Particle::getPosX()
-{
-	int px = pos.x;
-	return px;
-}
-
-int Particle::getPosY()
-{
-	int py = pos.y;
-	return py;
 }

@@ -1,9 +1,7 @@
 #pragma once
 #include "ofMain.h"
 #include "particle.h"
-#include "ofPixels.h"
 #include "ofxGui.h"
-#include <random>
 
 
 class ParticleSystem
@@ -15,32 +13,47 @@ public:
 	void setup();
 	void update();
 	void draw();
-
-	ofxPanel gui;
-	
+		
 private:
 
+	//system
 	vector<Particle*> particles;
-	//emitter: New particles are generated from this point
 	ofVec2f emitterPos;
+	ofVec2f attractor;
+	float numNewParticles; //number of new particles in this frame
+	ofParameter<int> rate;
+	ofParameter<float> lifeTime;
+	ofParameter<float> minSpeed;
+	ofParameter<float> maxSpeed;
+	ofParameter<float> ratio;
+	ofParameter<int> distanceThreshold;
 
-	float rate; //particles per millisecond
-	float numNewParticles;
-
+	//timing
 	float time0;
 	float timeNow;
 	float timestep;
 
-	ofImage dotsPicture;
-	ofImage falsePicture;
+	//emitter
+	ofImage emitterImage;
+	vector<ofVec2f> emitterList;
+	
+	vector<vector<ofVec2f>> paths;
 
-	ofParameter<bool> activateSystem;
+	//helper method
+	vector<ofVec2f> image2List(ofImage* img);
+	void generateAttractors(int numRings, int numKnotsperRing);
+
+	//gui elements
+	ofParameter<bool> generateAttractor;
+	ofParameter<bool> useAttractor;
+	ofParameter<int> numPaths;
+	ofParameter<int> numKnots;
+	ofParameter<bool> drawKnots;
 	ofParameterGroup parameterGroup;
-
-	vector<ofVec2f> dotsEmitterList;
-	vector<ofVec2f> falseEmitterList;
-
-	default_random_engine generator;
-
+	ofxPanel gui;
+	
+	/*vector<Knoten> knoten;
+	vector<Ebene> ebenen;*/
+	static constexpr float knotenradius = 16;
+	static constexpr int ebenenanzahl = 3;
 };
-

@@ -7,25 +7,28 @@ public:
 	Particle();
 	~Particle();
 
-	//start particle
-	void setup(ofVec2f emitterPos, bool variante);
-	//recalculate 
-	void update(float timestep);
-	//draw particle
+	//setup particle
+	void setup(ofVec2f emitterPos, ofVec2f speed, float lifetime, int pathId); 
+	void update(float timestep, float ratio, float distanceThreshold);
 	void draw();
+
 	float getAgeNorm();
+	bool toBeKilled;
 
-	void setVel(ofVec2f v);
+	ofVec2f attractor;
+	bool wantNextAttractor;
+	int pathId;
+	int knotId;
 
-	int getPosX();
-	int getPosY();
-
+	ofVec2f speedRange;
+	float speed;
 
 private:
 	//Position
 	ofVec2f pos;
 	//Velocity
 	ofVec2f vel;
+	
 	//allowed lifetime 
 	//constant value:the maximal time of living for the particle;
 	//when age is greater than lifetime, the particle dies
@@ -36,10 +39,4 @@ private:
 	//oder ofVec4f color;
 	ofColor color;
 	float size;
-
-	//soll partikel zerstört werden?
-	bool toBeKilled;
-
-	
 };
-

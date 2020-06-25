@@ -1,7 +1,16 @@
-﻿  system.cpp
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(69): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(95): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(185): warning C4018: '<': signed/unsigned mismatch
+﻿  main.cpp
+  ofApp.cpp
+  particle.cpp
+  system.cpp
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(71): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(75): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(86): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(115): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(116): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(123): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(256): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(257): warning C4018: '<': signed/unsigned mismatch
+     Creating library bin\particleSystem_debug.lib and object bin\particleSystem_debug.exp
   particleSystem.vcxproj -> C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\apps\myApps\particleSystem\bin\particleSystem_debug.exe
   
   	                   2	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\libs\fmodex\lib\vs\Win32\
