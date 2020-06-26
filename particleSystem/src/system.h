@@ -38,6 +38,7 @@ private:
 	vector<ofVec2f> emitterList;
 	
 	vector<vector<ofVec2f>> paths;
+	//vector<vector<vector<ofVec2f>>> paths;
 
 	//helper method
 	vector<ofVec2f> image2List(ofImage* img);

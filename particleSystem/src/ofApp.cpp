@@ -2,6 +2,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
+
+	ofSetWindowShape(1600, 1000);
+	ofSetWindowPosition(10, 10);
 	//ofSetFrameRate(60);
 	system.setup();
 }

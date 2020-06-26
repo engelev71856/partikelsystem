@@ -18,7 +18,9 @@ public:
 	ofVec2f attractor;
 	bool wantNextAttractor;
 	int pathId;
+	//int subpathId;
 	int knotId;
+	
 
 	ofVec2f speedRange;
 	float speed;
