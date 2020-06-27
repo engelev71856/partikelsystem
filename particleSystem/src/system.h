@@ -36,6 +36,10 @@ private:
 	//emitter
 	ofImage emitterImage;
 	vector<ofVec2f> emitterList;
+	//vector<ofVec2f> endpointList;
+
+	vector<vector<ofVec2f>> subpaths;
+	vector<vector<ofVec2f>> subpaths2;
 	
 	vector<vector<ofVec2f>> paths;
 	//vector<vector<vector<ofVec2f>>> paths;

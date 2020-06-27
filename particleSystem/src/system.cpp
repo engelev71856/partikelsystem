@@ -40,12 +40,30 @@ void ParticleSystem::setup()
 	parameterGroup.add(drawKnots.set("draw Knots", false));
 	gui.setup(parameterGroup);
 
+
+	/*ofVec2f endKnotA(10,10);
+	ofVec2f endKnotB(100, 10);
+	ofVec2f endKnotC(250, 10);
+	ofVec2f endKnotD(ofGetWidth()-10, 10);
+	ofVec2f endKnotE(10, ofGetHeight()-10);
+	ofVec2f endKnotF(ofGetWidth() - 10, ofGetHeight() - 10);
+	ofVec2f endKnotG(ofGetWidth() - 190, ofGetHeight() - 10);
+	endpointList.push_back(endKnotA);
+	endpointList.push_back(endKnotB);
+	endpointList.push_back(endKnotC);
+	endpointList.push_back(endKnotD);
+	endpointList.push_back(endKnotE);
+	endpointList.push_back(endKnotF);
+	endpointList.push_back(endKnotG);*/
+
+
 	//load image 
 	emitterImage.load("images/pointmid.jpg");
 	//generate emitterlist
 	emitterList = image2List(&emitterImage);
 	//generate random attractor once
 	generateAttractors(numPaths, numKnots);
+
 }
 
 //-------------------------------------------------------------------
@@ -72,15 +90,32 @@ void ParticleSystem::update()
 		particles[i]->update(timestep, ratio, distanceThreshold);
 		if (useAttractor.get()) {
 			if (particles[i]->wantNextAttractor) {
-				if (particles[i]->knotId + 1 < paths[particles[i]->pathId].size()) { // is there one more knot in this path?
-					particles[i]->knotId++;
-				}
-				particles[i]->attractor = ofVec2f(paths[particles[i]->pathId][particles[i]->knotId]); //set attractor to knot
-				particles[i]->wantNextAttractor = false;
+					if (particles[i]->knotId + 1 < paths[particles[i]->pathId].size()) { // is there one more knot in this path?
+						particles[i]->knotId++;
+					}
+			}
+			//
+			int c = i % 3;
+			switch (c) {
+			case 0: 
+				particles[i]->attractor = ofVec2f(paths[particles[i]->pathId][particles[i]->knotId]);
+				//set attractor to knot from paths 
+				break;
+			case 1:
+				particles[i]->attractor = ofVec2f(subpaths[particles[i]->pathId][particles[i]->knotId]);
+				//set attractor to knot from subpaths
+				break;
+			case 2:
+				particles[i]->attractor = ofVec2f(subpaths2[particles[i]->pathId][particles[i]->knotId]);
+				//set attractor to knot from subpaths2
+				break;
+			default:
+				break;
+			}
+			particles[i]->wantNextAttractor = false;
 			}
 		}
 		
-	}
 
 	//delete old particle 
 	for (int i = 0; i < particles.size();) {
@@ -97,7 +132,6 @@ void ParticleSystem::update()
 	//generate new particles
 	for (int i = 0; i < numNewParticles; i++) {
 		Particle* newParticle = new Particle();
-		//newParticle->setup(emitterList[ofRandom(emitterList.size() - 1)], ofVec2f(minSpeed, maxSpeed), lifeTime, ofRandom(paths.size()), ofRandom(subpaths.size()));
 		newParticle->setup(emitterList[ofRandom(emitterList.size() - 1)], ofVec2f(minSpeed, maxSpeed), lifeTime, ofRandom(paths.size()));
 		particles.push_back(newParticle);
 	}
@@ -116,6 +150,12 @@ void ParticleSystem::draw()
 		for (int p = 0; p < paths.size(); p++) {
 			for (int k = 0; k < paths[p].size(); k++) {
 				ofDrawCircle(paths[p][k], 2);
+			}
+		}
+		for (int p = 0; p < subpaths.size(); p++) {
+			for (int k = 0; k < subpaths[p].size(); k++) {
+				ofSetColor(255, 120, 80);
+				ofDrawCircle(subpaths[p][k], 2);
 			}
 		}
 	}
@@ -187,6 +227,7 @@ vector<ofVec2f> ParticleSystem::image2List(ofImage* img)
 }
 
 //-----------------------------------------------------------------------------
+//void ParticleSystem::generateAttractors(int numPaths, int numKnotsperPath, vector<ofVec2f> endpointList)
 
 void ParticleSystem::generateAttractors(int numPaths, int numKnotsperPath)
 {
@@ -198,17 +239,22 @@ void ParticleSystem::generateAttractors(int numPaths, int numKnotsperPath)
 	for (int p = 0; p < numPaths; p++) {
 		vector<ofVec2f> knots;
 		ofVec2f endKnot;
+
 		ofVec2f endKnotA(10,10);
 		ofVec2f endKnotB(ofGetWidth()-10, 10);
 		ofVec2f endKnotC(10, ofGetHeight()-10);
 		ofVec2f endKnotD(ofGetWidth() - 10, ofGetHeight() - 10);
+		
 
 		
 		for (int k = 0; k < numKnotsperPath; k++) {
 
+			//int testPath = p % endpointList.size();
+			//endKnot = endpointList[testPath];
+
 			int testPath = p % 4; 
 			float c = ofRandom(0,2);
-			
+		
 			switch (testPath) {
 			case 0:
 				endKnot = ofVec2f(endKnotA);
@@ -263,14 +309,37 @@ void ParticleSystem::generateAttractors(int numPaths, int numKnotsperPath)
 		paths.push_back(knots); 
 
 		//copy path for branching
-		vector<ofVec2f> pathsplit;
+		/*vector<ofVec2f> pathsplit;
 		pathsplit = paths[p];
-		//
+		//pathsplit.push_back(paths[p]);
+
 		for (int k = ((numKnotsperPath /2) + 1 ); k >= ((numKnotsperPath /2) + 1) && k < numKnotsperPath; k++) {
 			pathsplit[k].x = pathsplit[k].x + ofRandom(-120, 160);
 			pathsplit[k].y = pathsplit[k].y + ofRandom(-120, 160);
 		}
-		paths.push_back(pathsplit);	
+		paths.push_back(pathsplit);	*/
+
+		subpaths = paths;
+		for (int s = 0; s < subpaths.size(); s++) {
+			for (int k = numKnotsperPath / 2; k < numKnotsperPath-1; k++) {
+				//ofVec2f subr(subpaths[s][k].x, subpaths[s][k].y);
+				//ofVec2f r(subpaths[s][k-1].x, subpaths[s][k-1].y);
+				//subr.rotate(45, r);
+				subpaths[s][k].x = subpaths[s][k].x + ofRandom(90);
+				subpaths[s][k].y = 50; 
+			}
+
+		}
+
+
+		subpaths2 = paths;
+	}
+
+	//paths copy subpath 
+	for (int r = 0; r < subpaths.size(); r++) { //print all paths
+		for (int k = 0; k < subpaths[r].size(); k++) {
+			cout << "subpath: " << r << " subknot: " << k << " x: " << subpaths[r][k].x << " y: " << subpaths[r][k].y << endl;
+		}
 	}
 
 	for (int r = 0; r < paths.size(); r++) { //print all paths
