@@ -36,17 +36,14 @@ private:
 	//emitter
 	ofImage emitterImage;
 	vector<ofVec2f> emitterList;
-	//vector<ofVec2f> endpointList;
-
-	vector<vector<ofVec2f>> subpaths;
-	vector<vector<ofVec2f>> subpaths2;
+	//attractor
+	vector<ofVec2f> endpointList;
 	
 	vector<vector<ofVec2f>> paths;
-	//vector<vector<vector<ofVec2f>>> paths;
 
 	//helper method
 	vector<ofVec2f> image2List(ofImage* img);
-	void generateAttractors(int numRings, int numKnotsperRing);
+	void generateAttractors(int numKnotsperRing, vector<ofVec2f> endpoints);
 
 	//gui elements
 	ofParameter<bool> generateAttractor;

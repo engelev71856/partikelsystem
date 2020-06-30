@@ -15,7 +15,7 @@ Particle::~Particle()
 
 //-------------------------------------------------------------------
 
-void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime, int pathId)
+void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime)
 {
 	pos.x = emitterPos.x;
 	pos.y = emitterPos.y;
@@ -35,7 +35,7 @@ void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime, int path
 	toBeKilled = false;
 
 	//this->subpathId = subpathId;
-	this->pathId = pathId;
+	//this->pathId = pathId;
 	knotId = 0;
 }
 
@@ -97,6 +97,11 @@ void Particle::draw()
 	ofSetColor(255);
 
 
+}
+
+void Particle::setAttractor(int pathId)
+{
+	this->pathId = pathId;
 }
 
 //-------------------------------------------------------------------
