@@ -31,7 +31,7 @@ void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime)
 	age = 0;
 	color = ofColor(155,48,255);
 	color.a = 127;
-	size = 3;
+	size = 2;
 	toBeKilled = false;
 
 	//this->subpathId = subpathId;
@@ -97,13 +97,13 @@ void Particle::draw()
 	//ofSetColor(color);
 
 	ofSetColor(color);
-	if (attractor != pos){
+
+	/*(if (attractor != pos){
 		if (knotId != 0){
 	ofSetLineWidth(2);
 	ofDrawLine(oldpos.x, oldpos.y, pos.x, pos.y);
 		}
-	}
-
+	}*/
 	ofDrawCircle(pos.x, pos.y, size);
 	ofSetColor(255);
 }

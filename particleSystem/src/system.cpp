@@ -28,12 +28,17 @@ void ParticleSystem::setup()
 	parameterGroup.add(maxSpeed.set("max speed", .25, 0, 1));
 	parameterGroup.add(ratio.set("vel ratio", 0, 0, 1));
 	parameterGroup.add(distanceThreshold.set("distance threshold", 0, 0, 100));
-
-	parameterGroup.add(numPaths.set("num paths", 5, 1, 20));
-	parameterGroup.add(numKnots.set("num knots", 5, 1, 10));
-	parameterGroup.add(generateAttractor.set("generate random attractor", false));
+	
+	parameterGroup.add(numPaths.set("num paths", 0, 1, 20));
+	parameterGroup.add(numKnots.set("num knots", 8, 1, 10));
+	parameterGroup.add(randomize.set("randomize", false));
+	parameterGroup.add(generateAttractor.set("generate attractor", false));
 	parameterGroup.add(useAttractor.set("use attractor", false));
 	parameterGroup.add(drawKnots.set("draw Knots", false));
+	
+
+	parameterGroup.add(numSplitlists.set("num spits", 2, 0, 20));
+	parameterGroup.add(splitSlider.set("splitknot position", 1,  0, 3));
 	gui.setup(parameterGroup);
 
 
@@ -55,7 +60,7 @@ void ParticleSystem::setup()
 
 
 	//load image 
-	emitterImage.load("images/pointmid.jpg");
+	emitterImage.load("images/ahorn2.jpeg");
 	//generate emitterlist
 	emitterList = image2List(&emitterImage);
 	//generate random attractor once
@@ -90,7 +95,8 @@ void ParticleSystem::update()
 						if (particles[i]->knotId + 1 < paths[particles[i]->pathId].size()) { // is there one more knot in this path?
 							particles[i]->knotId++;
 						}
-						particles[i]->attractor = ofVec2f(paths[particles[i]->pathId][particles[i]->knotId]);
+						ofVec2f att(paths[particles[i]->pathId][particles[i]->knotId]);
+						particles[i]->attractor = ofVec2f(att.x + ofRandom(-10,10), att.y + ofRandom(-10,10)); //random +-, damit Pfade nicht so eng sind, sondern breiter
 						particles[i]->wantNextAttractor = false;
 					}
 				}  
@@ -227,38 +233,48 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 			ofVec2f step = mid.getInterpolated(endKnot, iteration);
 			ofVec2f knot(step.x, step.y);
 
-			/*if (k < numKnotsperPath) {
-				knot.x = knot.x + ofRandom(-20, 60);
-				knot.y = knot.y + ofRandom(-20, 60);
-			}*/
+			//360 / Anzahl der endknots = radius der rauskommt so darf sich of randombewegen
+			//int radius = (360 / endpoints.size())/2;
+
+			if (randomize) {
+				if (k < numKnotsperPath && k > 0) {
+					ofVec2f pri(knots[k - 1].x, knots[k - 1].y);
+					knot.rotate(ofRandom(-40, 40), pri);
+				}
+			}
+		
 			knots.push_back(knot);
 		}
+
+		
 		paths.push_back(knots);
 	}
 
-	for (int p = 0; p < endpoints.size(); p++) {
-		//copy path for branching
-		//left
-		vector<ofVec2f> pathsplit;
-		pathsplit = paths[p];
-		//---------------------------------------------------------------------
-		for (int k = pathsplit.size() - 2; k < pathsplit.size(); k++) {
-			ofVec2f r(pathsplit[k - 1].x, pathsplit[k - 1].y);
-			pathsplit[k].rotate(25, r);
-		}
-		//copy path for branching
-		//right
-		vector<ofVec2f> pathsplit2;
-		pathsplit2 = paths[p];
-		//
-		for (int k = pathsplit.size() - 2; k < pathsplit.size(); k++) {
+	for (int s = 0; s < numSplitlists; s++) {
+		for (int p = 0; p < endpoints.size(); p++) {
+			//copy path for branching
+			//left
+			vector<ofVec2f> pathsplit;
+			pathsplit = paths[p];
+			//---------------------------------------------------------------------
+			for (int k = pathsplit.size() / 2 + splitSlider; k < pathsplit.size(); k++) {
+				ofVec2f r(pathsplit[k - 1].x, pathsplit[k - 1].y);
+				pathsplit[k].rotate(ofRandom(5, 50), r);
+			}
+			//copy path for branching
+			//right
+			vector<ofVec2f> pathsplit2;
+			pathsplit2 = paths[p];
+			//
+			for (int k = pathsplit.size() / 2 + splitSlider; k < pathsplit.size(); k++) {
 
-			ofVec2f r(pathsplit2[k - 1].x, pathsplit2[k - 1].y);
-			pathsplit2[k].rotate(-35, r);
-		}
+				ofVec2f r(pathsplit2[k - 1].x, pathsplit2[k - 1].y);
+				pathsplit2[k].rotate(ofRandom(-50, -5), r);
+			}
 
-		paths.push_back(pathsplit);
-		paths.push_back(pathsplit2);
+			paths.push_back(pathsplit);
+			paths.push_back(pathsplit2);
+		}
 	}
 
 	cout << numPaths << "_"<<numKnotsperPath << endl;
@@ -269,3 +285,5 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 		}
 	}
 }
+  /*Slider zb. für anzahl verzweigungen -- o.a.
+  wenn Zeit:farbe für gburt / TOD - Faden - Framebufferobject - fbo, evtl mesh von janine -*/

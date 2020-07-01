@@ -51,9 +51,16 @@ private:
 	ofParameter<int> numPaths;
 	ofParameter<int> numKnots;
 	ofParameter<bool> drawKnots;
+	ofParameter<bool> randomize;
+
+	ofParameter<int> numSplitlists;
+	ofParameter<int> splitSlider;
+
 	ofParameterGroup parameterGroup;
 	ofxPanel gui;
 	
+
+
 	/*vector<Knoten> knoten;
 	vector<Ebene> ebenen;*/
 	static constexpr float knotenradius = 16;
