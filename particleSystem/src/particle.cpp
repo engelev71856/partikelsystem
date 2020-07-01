@@ -31,7 +31,7 @@ void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime)
 	age = 0;
 	color = ofColor(155,48,255);
 	color.a = 127;
-	size = 2;
+	size = 3;
 	toBeKilled = false;
 
 	//this->subpathId = subpathId;
@@ -43,6 +43,9 @@ void Particle::setup(ofVec2f emitterPos, ofVec2f speed, float lifetime)
 
 void Particle::update(float timestep, float ratio, float distanceThreshold)
 {
+	//save old pos 
+	oldpos = ofVec2f(pos.x, pos.y);
+
 	//Update pos
 	pos += vel * timestep; // geschwindigkeit gibt gleichzeitig die richtung an! neue 
 
@@ -92,11 +95,17 @@ void Particle::update(float timestep, float ratio, float distanceThreshold)
 void Particle::draw()
 {
 	//ofSetColor(color);
+
 	ofSetColor(color);
+	if (attractor != pos){
+		if (knotId != 0){
+	ofSetLineWidth(2);
+	ofDrawLine(oldpos.x, oldpos.y, pos.x, pos.y);
+		}
+	}
+
 	ofDrawCircle(pos.x, pos.y, size);
 	ofSetColor(255);
-
-
 }
 
 void Particle::setAttractor(int pathId)

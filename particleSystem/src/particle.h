@@ -31,6 +31,8 @@ private:
 	ofVec2f pos;
 	//Velocity
 	ofVec2f vel;
+	//old Position for trail 
+	ofVec2f oldpos;
 	
 	//allowed lifetime 
 	//constant value:the maximal time of living for the particle;
