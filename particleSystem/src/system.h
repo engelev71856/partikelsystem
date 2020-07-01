@@ -58,4 +58,13 @@ private:
 	vector<Ebene> ebenen;*/
 	static constexpr float knotenradius = 16;
 	static constexpr int ebenenanzahl = 3;
+
+
+	//Mesh elements
+	ofMesh mesh;
+	ofParameter <float> uiAmount;
+	void generateMesh(ofImage* img);
+	void generateMeshUpdate(float uiAmount);
+	ofEasyCam cam;
+	int size = 96;
 };
