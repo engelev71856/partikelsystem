@@ -22,8 +22,6 @@ void ParticleSystem::setup()
 	particles.clear();
 
 	//Gui generierung
-	//generiere mash gui
-	//parameterGroup.add(uiAmount.set("amount", 0, 0, 6));
 	parameterGroup.add(rate.set("rate", 1,0,10));
 	parameterGroup.add(lifeTime.set("lifetime", 5, 0, 20));
 	parameterGroup.add(minSpeed.set("min speed", .1, 0, 1));
@@ -57,15 +55,11 @@ void ParticleSystem::setup()
 
 
 	//load image 
-	emitterImage.load("images/ahorn2.jpg");
+	emitterImage.load("images/pointmid.jpg");
 	//generate emitterlist
 	emitterList = image2List(&emitterImage);
 	//generate random attractor once
 	generateAttractors(numKnots, endpointList);
-
-	//generate MeshVertices
-	//generateMesh(&emitterImage);
-	//cam.setDistance(100);
 
 }
 
@@ -123,20 +117,6 @@ void ParticleSystem::update()
 	}
 
 	emitterList = image2List(&emitterImage);
-
-	/*//update Bild mash
-	int count = 0;
-
-	for (int x = 0; x < size; x++) {
-		for (int y = 0; y < size; y++) {
-			ofVec3f position = mesh.getVertex(count);
-			position.z = ofMap(ofNoise(count, ofGetElapsedTimef()), 0, 1, 0, uiAmount);
-			mesh.setVertex(count, position);
-			count++;
-		}
-	}
-	*/
-
 }
 
 //-------------------------------------------------------------------
@@ -175,18 +155,6 @@ void ParticleSystem::draw()
 	ofDrawBitmapString("fps: " + ofToString(ofGetFrameRate()), 10, 20);
 	ofSetColor(255);
 
-	//Matrix draw
-	/*
-	ofPushMatrix(); //speichere in Koordinatensystem
-	cam.begin();
-	//ofNoFill();
-	ofSetColor(255);
-	mesh.drawWireframe();
-	cam.end();
-	ofPopMatrix(); // Wiederherstellen
-	gui.draw();
-	*/
-
 }
 
 //-----------------------------------------------------------------------------
@@ -197,29 +165,29 @@ vector<ofVec2f> ParticleSystem::image2List(ofImage* img)
 
 	//get Image properties
 	ofPixels & pixels = img->getPixels();
-
-	int x_bild = pixels.getWidth(); //x_bild
-	int y_bild = pixels.getHeight();//y_bild
+	int w = pixels.getWidth();
+	int h = pixels.getHeight();
 
 	int bpp = pixels.getBytesPerPixel();
-
-	//interate through image and get values
-	for (int y_partikel = 0; y_partikel < y_bild; y_partikel++) {
-		for (int x_partikel = 0; x_partikel < x_bild; x_partikel++) {
-
-			ofVec3f col(pixels[(x_partikel + (y_partikel * x_bild)) * 3 + 0, (x_partikel + (y_partikel * x_bild)) * 3 + 1, (x_partikel + (y_partikel * x_bild)) * 3 + 2]);
-
-			if (col.length()) {//any color except black
-				list.emplace_back(x_partikel, y_partikel);
-
-			}
-		}
 	
+	//interate through image and get values
+	for (int y = 0; y < h; y++) {
+		for (int x = 0; x < w; x++) {
+
+ofVec3f col(pixels[(x + (y * w)) * 3 + 0, (x + (y * w)) * 3 + 1, (x + (y * w)) * 3 + 2]);
+
+if (col.length()) {//any color except black
+	list.emplace_back(x, y);
+}
+		}
 	}
-	if ((x_bild < ofGetWidth()) && (y_bild < ofGetHeight())) {
+
+	if ((w < ofGetWidth()) && (h < ofGetHeight())) {
 		for (int i = 0; i < list.size(); i++) {
-			list[i].x += (ofGetWidth() - x_bild) / 2;
-			list[i].y += (ofGetHeight() - y_bild) / 2;
+			float calX = (ofGetWidth() - w) / 2;
+			float calY = (ofGetHeight() - h) / 2;
+			list[i].x += calX;
+			list[i].y += calY;
 		}
 	}
 
@@ -293,40 +261,11 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 		paths.push_back(pathsplit2);
 	}
 
-	cout << numPaths << "_" << numKnotsperPath << endl;
+	cout << numPaths << "_"<<numKnotsperPath << endl;
 
 	for (int r = 0; r < paths.size(); r++) { //print all paths
 		for (int k = 0; k < paths[r].size(); k++) {
 			cout << "path: " << r << " knot: " << k << " x: " << paths[r][k].x << " y: " << paths[r][k].y << endl;
 		}
 	}
-}
-//--------------------------------------------------------------------------------------------------------------------------------------
-	void ParticleSystem::generateMesh(ofImage* img)
-	{
-		//vector<ofVec2f> MeshList;
-
-		//get Image properties
-		ofPixels & pixels = img->getPixels();
-
-		//interate through image and get values
-		for (int y = 0; y < size; y++) {
-			for (int x = 0; x < size; x++) {
-				mesh.addVertex(ofPoint(x - size / 2, y - size / 2));
-				//MeshList.emplace_back(ofPoint(x - size / 2, y - size / 2));
-			}
-
-		}
-
-		for (int x = 0; x < size - 1; x++) {
-			for (int y = 0; y < size - 1; y++) {
-				mesh.addIndex(x + y * size);
-				mesh.addIndex((x + 1) + y * size);
-				mesh.addIndex(x + (y + 1) * size);
-				mesh.addIndex((x + 1) + y * size);
-				mesh.addIndex((x + 1) + (y + 1) * size);
-				mesh.addIndex(x + (y + 1) * size);
-			}
-		}
-
 }
