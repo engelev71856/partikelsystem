@@ -13,12 +13,8 @@ public:
 	void setup();
 	void update();
 	void draw();
-
-	
-
+		
 private:
-	//switch intital
-	//int setStatus;
 
 	//system
 	vector<Particle*> particles;
@@ -40,14 +36,14 @@ private:
 	//emitter
 	ofImage emitterImage;
 	vector<ofVec2f> emitterList;
-	//vector<vector<ofVec2f>> transformation;
+	//attractor
+	vector<ofVec2f> endpointList;
 	
 	vector<vector<ofVec2f>> paths;
-	//vector<vector<vector<ofVec2f>>> paths;
 
 	//helper method
 	vector<ofVec2f> image2List(ofImage* img);
-	void generateAttractors(int numRings, int numKnotsperRing);
+	void generateAttractors(int numKnotsperRing, vector<ofVec2f> endpoints);
 
 	//gui elements
 	ofParameter<bool> generateAttractor;
@@ -57,14 +53,6 @@ private:
 	ofParameter<bool> drawKnots;
 	ofParameterGroup parameterGroup;
 	ofxPanel gui;
-
-	//Mesh elements
-	ofMesh mesh;
-	ofParameter <float> uiAmount;
-	void generateMesh(ofImage* img);
-	void generateMeshUpdate(float uiAmount);
-	ofEasyCam cam;
-	int size = 96;//96
 	
 	/*vector<Knoten> knoten;
 	vector<Ebene> ebenen;*/
