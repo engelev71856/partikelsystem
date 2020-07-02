@@ -42,13 +42,12 @@ void ParticleSystem::setup()
 	gui.setup(parameterGroup);
 
 
-	ofVec2f endKnotA(10,10);
-	ofVec2f endKnotB(600, 10);
-	ofVec2f endKnotC(450, 10);
-	ofVec2f endKnotD(ofGetWidth()-10, 10);
-	ofVec2f endKnotE(10, ofGetHeight()-10);
-	ofVec2f endKnotF(ofGetWidth() - 10, ofGetHeight() - 10);
-	ofVec2f endKnotG(ofGetWidth() - 390, ofGetHeight() - 10);
+	ofVec2f endKnotA(100, 0);
+	ofVec2f endKnotB(950, 0);
+	ofVec2f endKnotC(1800, 0);
+	ofVec2f endKnotD(100, ofGetHeight());
+	ofVec2f endKnotE(800, ofGetHeight());
+	ofVec2f endKnotF(1800, ofGetHeight());
 
 	endpointList.push_back(endKnotA);
 	endpointList.push_back(endKnotB);
@@ -56,11 +55,10 @@ void ParticleSystem::setup()
 	endpointList.push_back(endKnotD);
 	endpointList.push_back(endKnotE);
 	endpointList.push_back(endKnotF);
-	endpointList.push_back(endKnotG);
 
 
 	//load image 
-	emitterImage.load("images/ahorn2.jpeg");
+	emitterImage.load("images/zelle.jpg");
 	//generate emitterlist
 	emitterList = image2List(&emitterImage);
 	//generate random attractor once
@@ -89,14 +87,14 @@ void ParticleSystem::update()
 	
 	//update old particles
 	for (int i = 0; i < particles.size(); i++) {
-		particles[i]->update(timestep, ratio, distanceThreshold);
+		particles[i]->update(timeNow, timestep, ratio, distanceThreshold);
 		if (useAttractor.get()) {
 					if (particles[i]->wantNextAttractor) {
 						if (particles[i]->knotId + 1 < paths[particles[i]->pathId].size()) { // is there one more knot in this path?
 							particles[i]->knotId++;
 						}
 						ofVec2f att(paths[particles[i]->pathId][particles[i]->knotId]);
-						particles[i]->attractor = ofVec2f(att.x + ofRandom(-10,10), att.y + ofRandom(-10,10)); //random +-, damit Pfade nicht so eng sind, sondern breiter
+						particles[i]->attractor = ofVec2f(att.x + ofRandom(-5,5), att.y + ofRandom(-5, 5)); //random +-, damit Pfade nicht so eng sind, sondern breiter
 						particles[i]->wantNextAttractor = false;
 					}
 				}  
@@ -132,7 +130,7 @@ void ParticleSystem::draw()
 	ofBackground(0); 
 	ofFill();
 	if (drawKnots) {
-		for (int p = 0; p < paths.size() / 2; p++) {
+		for (int p = 0; p < paths.size(); p++) {
 			for (int k = 0; k < paths[p].size(); k++) {
 				ofDrawCircle(paths[p][k], 2);
 			}
@@ -237,7 +235,8 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 			//int radius = (360 / endpoints.size())/2;
 
 			if (randomize) {
-				if (k < numKnotsperPath && k > 0) {
+				//fixierter Endpoint, damit die Partikel zum Bildrand gelangen können 
+				if (k < numKnotsperPath-1 && k > 0) {
 					ofVec2f pri(knots[k - 1].x, knots[k - 1].y);
 					knot.rotate(ofRandom(-40, 40), pri);
 				}
