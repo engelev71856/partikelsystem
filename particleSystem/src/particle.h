@@ -1,6 +1,9 @@
 #pragma once
 #include "ofMain.h"
 
+
+
+
 class Particle
 {
 public:
@@ -42,6 +45,10 @@ private:
 	//time of living
 	float age;
 	//color 
+	//color 
+	float hue;
+	float sat;
+	float bri;
 	//oder ofVec4f color;
 	ofColor color;
 	float size;

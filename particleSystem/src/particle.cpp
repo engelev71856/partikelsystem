@@ -48,6 +48,8 @@ void Particle::update(float timeNow, float timestep, float ratio, float distance
 	time = timeNow;
 	//save old pos 
 	oldpos = ofVec2f(pos.x, pos.y);
+	oldpos += vel * ((timestep / 2)/2);
+	
 
 	//Update pos
 	pos += vel * timestep; // geschwindigkeit gibt gleichzeitig die richtung an! neue 
@@ -62,7 +64,7 @@ void Particle::update(float timeNow, float timestep, float ratio, float distance
 	if ((attractor - pos).length() < distanceThreshold) {
 		wantNextAttractor = true;
 	}
-
+	/*
 	if (knotId == 3) {
 		color = ofColor(126, 192, 238);
 		color.a = 100;
@@ -70,7 +72,7 @@ void Particle::update(float timeNow, float timestep, float ratio, float distance
 	if (knotId == 5) {
 		color = ofColor(0, 255, 255);
 		color.a = 70;
-	}
+	}*/
 
 
 	if (getAgeNorm() > 1) {
@@ -100,12 +102,21 @@ void Particle::draw()
 
 	ofSetColor(color);
 
-	/*(if (attractor != pos){
-		if (knotId != 0){
+	if (knotId != 0) {
+		float rangeInputHue = 1 - getAgeNorm();
+		hue = ofMap(rangeInputHue, 0, 1, 170, 220);
+		sat = 205;
+		bri = 190;
+		color = ofColor::fromHsb(hue, sat, bri);
+	}
+	
+	if (attractor != pos){
+		if (knotId > 2){
 	ofSetLineWidth(2);
 	ofDrawLine(oldpos.x, oldpos.y, pos.x, pos.y);
 		}
-	}*/
+	}
+	
 	/*if (toBeKilled != true) {
 		//Compute size
 		float size = ofMap(

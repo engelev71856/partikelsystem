@@ -21,26 +21,36 @@ void ParticleSystem::setup()
 {
 	particles.clear();
 
+	
+
 	//Gui generierung
 	parameterGroup.add(rate.set("rate", 1,0,10));
-	parameterGroup.add(lifeTime.set("lifetime", 5, 0, 20));
-	parameterGroup.add(minSpeed.set("min speed", .1, 0, 1));
-	parameterGroup.add(maxSpeed.set("max speed", .25, 0, 1));
-	parameterGroup.add(ratio.set("vel ratio", 0, 0, 1));
-	parameterGroup.add(distanceThreshold.set("distance threshold", 0, 0, 100));
+	parameterGroup.add(lifeTime.set("lifetime", 8.5, 0, 20));
+	parameterGroup.add(minSpeed.set("min speed", 0.1, 0, 1));
+	parameterGroup.add(maxSpeed.set("max speed", 0.055, 0, 1));
+	parameterGroup.add(ratio.set("vel ratio", 0.53, 0, 1));
+	parameterGroup.add(distanceThreshold.set("distance threshold", 39, 0, 100));
 	
 	parameterGroup.add(numPaths.set("num paths", 0, 1, 20));
 	parameterGroup.add(numKnots.set("num knots", 8, 1, 10));
-	parameterGroup.add(randomize.set("randomize", false));
+	parameterGroup.add(randomize.set("randomize", true));
 	parameterGroup.add(generateAttractor.set("generate attractor", false));
 	parameterGroup.add(useAttractor.set("use attractor", false));
 	parameterGroup.add(drawKnots.set("draw Knots", false));
+	parameterGroup.add(fader.set("fade particles", 0.755, 0,1));
 	
 
 	parameterGroup.add(numSplitlists.set("num spits", 2, 0, 20));
-	parameterGroup.add(splitSlider.set("splitknot position", 1,  0, 3));
+	parameterGroup.add(splitSlider.set("splitknot position", 0,  0, 3));
 	gui.setup(parameterGroup);
 
+	int w = ofGetWidth();
+	int h = ofGetHeight();
+	fbo.allocate(w, h, GL_RGB32F_ARB);
+
+	fbo.begin();
+	fbo.end();
+	
 
 	ofVec2f endKnotA(100, 0);
 	ofVec2f endKnotB(950, 0);
@@ -58,11 +68,13 @@ void ParticleSystem::setup()
 
 
 	//load image 
-	emitterImage.load("images/zelle.jpg");
+	emitterImage.load("images/baumringe.jpg");
 	//generate emitterlist
 	emitterList = image2List(&emitterImage);
 	//generate random attractor once
 	generateAttractors(numKnots, endpointList);
+	
+	
 
 }
 
@@ -129,13 +141,15 @@ void ParticleSystem::draw()
 {
 	ofBackground(0); 
 	ofFill();
-	if (drawKnots) {
-		for (int p = 0; p < paths.size(); p++) {
-			for (int k = 0; k < paths[p].size(); k++) {
-				ofDrawCircle(paths[p][k], 2);
-			}
-		}
-	}
+	
+	fbo.begin();
+	ofEnableAlphaBlending();
+	float alpha = (1 - fader) * 255;
+	ofSetColor(0, 0, 0, alpha);
+	ofFill();
+	ofRect(0, 0, ofGetWidth(), ofGetHeight());
+	ofDisableAlphaBlending();
+
 
 	ofNoFill();
 	for (int i = 1; i <= numKnots; i++) {
@@ -151,8 +165,20 @@ void ParticleSystem::draw()
 		particles[i]->draw();
 	}
 	ofDisableAlphaBlending();
+	fbo.end();
+	//ofSetColor(255, 255, 255);
+	fbo.draw(0, 0);
 
 	gui.draw();
+
+	ofFill();
+	if (drawKnots) {
+		for (int p = 0; p < paths.size(); p++) {
+			for (int k = 0; k < paths[p].size(); k++) {
+				ofDrawCircle(paths[p][k], 2);
+			}
+		}
+	}
 
 	ofSetColor(255, 0, 255);
 	ofDrawBitmapString("NumParticles: " + ofToString(particles.size()), 10, 10);
@@ -166,7 +192,7 @@ void ParticleSystem::draw()
 vector<ofVec2f> ParticleSystem::image2List(ofImage* img)
 {
 	vector<ofVec2f> list;
-
+	
 	//get Image properties
 	ofPixels & pixels = img->getPixels();
 	int w = pixels.getWidth();
@@ -225,14 +251,9 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 
 			ofVec2f midToEndKnot((endKnot.x - mid.x), (endKnot.y - mid.y));
 
-			//ofVec2f step((midToEndKnot.x * iteration),(midToEndKnot.y * iteration));
-			//ofVec2f knot(mid.x + step.x, mid.y + step.y);
-
 			ofVec2f step = mid.getInterpolated(endKnot, iteration);
 			ofVec2f knot(step.x, step.y);
 
-			//360 / Anzahl der endknots = radius der rauskommt so darf sich of randombewegen
-			//int radius = (360 / endpoints.size())/2;
 
 			if (randomize) {
 				//fixierter Endpoint, damit die Partikel zum Bildrand gelangen können 
@@ -251,28 +272,33 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 
 	for (int s = 0; s < numSplitlists; s++) {
 		for (int p = 0; p < endpoints.size(); p++) {
+
 			//copy path for branching
 			//left
 			vector<ofVec2f> pathsplit;
 			pathsplit = paths[p];
+
 			//---------------------------------------------------------------------
 			for (int k = pathsplit.size() / 2 + splitSlider; k < pathsplit.size(); k++) {
 				ofVec2f r(pathsplit[k - 1].x, pathsplit[k - 1].y);
-				pathsplit[k].rotate(ofRandom(5, 50), r);
+				pathsplit[k].rotate(ofRandom(5, 55), r);
 			}
+
 			//copy path for branching
 			//right
+
 			vector<ofVec2f> pathsplit2;
 			pathsplit2 = paths[p];
-			//
+
 			for (int k = pathsplit.size() / 2 + splitSlider; k < pathsplit.size(); k++) {
 
 				ofVec2f r(pathsplit2[k - 1].x, pathsplit2[k - 1].y);
-				pathsplit2[k].rotate(ofRandom(-50, -5), r);
+				pathsplit2[k].rotate(ofRandom(-55, -5), r);
 			}
 
 			paths.push_back(pathsplit);
 			paths.push_back(pathsplit2);
+
 		}
 	}
 
@@ -284,5 +310,3 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 		}
 	}
 }
-  /*Slider zb. für anzahl verzweigungen -- o.a.
-  wenn Zeit:farbe für gburt / TOD - Faden - Framebufferobject - fbo, evtl mesh von janine -*/

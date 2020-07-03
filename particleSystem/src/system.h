@@ -14,6 +14,7 @@ public:
 	void update();
 	void draw();
 		
+	ofParameter<float> fader;
 private:
 
 	//system
@@ -59,7 +60,7 @@ private:
 	ofParameterGroup parameterGroup;
 	ofxPanel gui;
 	
-
+	ofFbo fbo;
 
 	/*vector<Knoten> knoten;
 	vector<Ebene> ebenen;*/
