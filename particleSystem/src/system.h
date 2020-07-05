@@ -22,12 +22,20 @@ private:
 	ofVec2f emitterPos;
 	ofVec2f attractor;
 	float numNewParticles; //number of new particles in this frame
-	ofParameter<int> rate;
-	ofParameter<float> lifeTime;
-	ofParameter<float> minSpeed;
-	ofParameter<float> maxSpeed;
-	ofParameter<float> ratio;
-	ofParameter<int> distanceThreshold;
+
+	//ofParameter<int> rate;
+	//ofParameter<float> lifeTime;
+	//ofParameter<float> minSpeed;
+	//ofParameter<float> maxSpeed;
+	//ofParameter<float> ratio;
+	//ofParameter<int> distanceThreshold;
+
+	int rate;
+	float lifeTime;
+	float minSpeed;
+	float maxSpeed;
+	float ratio;
+	int distanceThreshold;
 
 	//timing
 	float time0;

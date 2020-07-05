@@ -24,12 +24,12 @@ void ParticleSystem::setup()
 	
 
 	//Gui generierung
-	parameterGroup.add(rate.set("rate", 1,0,10));
-	parameterGroup.add(lifeTime.set("lifetime", 8.5, 0, 20));
-	parameterGroup.add(minSpeed.set("min speed", 0.1, 0, 1));
-	parameterGroup.add(maxSpeed.set("max speed", 0.055, 0, 1));
-	parameterGroup.add(ratio.set("vel ratio", 0.53, 0, 1));
-	parameterGroup.add(distanceThreshold.set("distance threshold", 39, 0, 100));
+	//parameterGroup.add(rate.set("rate", 1,0,10));
+	//parameterGroup.add(lifeTime.set("lifetime", 8.5, 0, 25));
+	//parameterGroup.add(minSpeed.set("min speed", 0.1, 0, 1));
+	//parameterGroup.add(maxSpeed.set("max speed", 0.055, 0, 1));
+	//parameterGroup.add(ratio.set("vel ratio", 0.53, 0, 1));
+	//parameterGroup.add(distanceThreshold.set("distance threshold", 39, 0, 100));
 	
 	parameterGroup.add(numPaths.set("num paths", 0, 1, 20));
 	parameterGroup.add(numKnots.set("num knots", 8, 1, 10));
@@ -39,6 +39,14 @@ void ParticleSystem::setup()
 	parameterGroup.add(drawKnots.set("draw Knots", false));
 	parameterGroup.add(fader.set("fade particles", 0.755, 0,1));
 	
+
+	//feste Werte aus Gui
+	rate = 1;
+	lifeTime = 13.375;
+	minSpeed = 0.025;
+	maxSpeed = 0.035;
+	ratio = 0.05;
+	distanceThreshold = 0;
 
 	parameterGroup.add(numSplitlists.set("num spits", 2, 0, 20));
 	parameterGroup.add(splitSlider.set("splitknot position", 0,  0, 3));
@@ -52,12 +60,12 @@ void ParticleSystem::setup()
 	fbo.end();
 	
 
-	ofVec2f endKnotA(100, 0);
-	ofVec2f endKnotB(950, 0);
-	ofVec2f endKnotC(1800, 0);
-	ofVec2f endKnotD(100, ofGetHeight());
-	ofVec2f endKnotE(800, ofGetHeight());
-	ofVec2f endKnotF(1800, ofGetHeight());
+	ofVec2f endKnotA(200, -10);
+	ofVec2f endKnotB(950, -70);
+	ofVec2f endKnotC(1700, -10);
+	ofVec2f endKnotD(200, ofGetHeight()+10);
+	ofVec2f endKnotE(800, ofGetHeight()+100);
+	ofVec2f endKnotF(1700, ofGetHeight()+10);
 
 	endpointList.push_back(endKnotA);
 	endpointList.push_back(endKnotB);
@@ -82,6 +90,23 @@ void ParticleSystem::setup()
 
 void ParticleSystem::update()
 {
+	//fix values
+	if (useAttractor) {
+		lifeTime = 13.125;
+		minSpeed = 0.035;
+		maxSpeed = 0.095;
+		ratio = 0.38;
+		distanceThreshold = 68;
+	}
+
+	/*
+	if (ofGetElapsedTimef() > 6) {
+		maxSpeed = 0.45;
+		ratio = 0.65;
+	}
+	*/
+
+
 	// Parameter timestep: the time in seconds between the current and the previous callings of this function.
 	// Will be used for Particle:update(float timestep) Methode
 	//Compute timestep
@@ -91,6 +116,10 @@ void ParticleSystem::update()
 
 	//calculate number of new particles
 	numNewParticles = round(timestep * rate);
+
+	if (useAttractor) {
+		numNewParticles = round((timestep * rate)/2.0);
+	}
 
 	if (generateAttractor.get()) {
 		generateAttractors(numKnots, endpointList);
@@ -106,7 +135,7 @@ void ParticleSystem::update()
 							particles[i]->knotId++;
 						}
 						ofVec2f att(paths[particles[i]->pathId][particles[i]->knotId]);
-						particles[i]->attractor = ofVec2f(att.x + ofRandom(-5,5), att.y + ofRandom(-5, 5)); //random +-, damit Pfade nicht so eng sind, sondern breiter
+						particles[i]->attractor = ofVec2f(att.x + ofRandom(-1,1), att.y + ofRandom(-1, 1)); //random +-, damit Pfade nicht so eng sind, sondern breiter
 						particles[i]->wantNextAttractor = false;
 					}
 				}  
@@ -181,7 +210,8 @@ void ParticleSystem::draw()
 	}
 
 	ofSetColor(255, 0, 255);
-	ofDrawBitmapString("NumParticles: " + ofToString(particles.size()), 10, 10);
+	ofDrawBitmapString("numNewParticles: " + ofToString(numNewParticles), 10, 10);
+
 	ofDrawBitmapString("fps: " + ofToString(ofGetFrameRate()), 10, 20);
 	ofSetColor(255);
 
