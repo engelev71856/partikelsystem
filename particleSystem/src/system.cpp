@@ -41,8 +41,8 @@ void ParticleSystem::setup()
 	
 
 	//feste Werte aus Gui
-	rate = 1;
-	lifeTime = 13.375;
+	rate = 3;
+	lifeTime = 1;
 	minSpeed = 0.025;
 	maxSpeed = 0.035;
 	ratio = 0.05;
@@ -94,6 +94,9 @@ void ParticleSystem::setup()
 
 void ParticleSystem::update()
 {
+	
+	
+	
 	//fix values
 	if (useAttractor) {
 		lifeTime = 13.125;
@@ -101,8 +104,14 @@ void ParticleSystem::update()
 		maxSpeed = 0.095;
 		ratio = 0.38;
 		distanceThreshold = 45;
+		rate = 1;
 	}
 
+
+	if (useAttractor==false) {
+
+	}
+	
 	/*
 	if (ofGetElapsedTimef() > 6) {
 		maxSpeed = 0.45;

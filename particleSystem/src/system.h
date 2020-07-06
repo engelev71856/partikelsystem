@@ -2,6 +2,8 @@
 #include "ofMain.h"
 #include "particle.h"
 #include "ofxGui.h"
+#include "ofxOsc.h"
+//#include "OSCElement.h"
 
 
 class ParticleSystem
