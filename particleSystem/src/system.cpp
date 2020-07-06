@@ -29,15 +29,15 @@ void ParticleSystem::setup()
 	//parameterGroup.add(minSpeed.set("min speed", 0.1, 0, 1));
 	//parameterGroup.add(maxSpeed.set("max speed", 0.055, 0, 1));
 	//parameterGroup.add(ratio.set("vel ratio", 0.53, 0, 1));
-	//parameterGroup.add(distanceThreshold.set("distance threshold", 39, 0, 100));
+	//parameterGroup.add(distanceThreshold.set("distance threshold", 45, 0, 100));
 	
-	parameterGroup.add(numPaths.set("num paths", 0, 1, 20));
-	parameterGroup.add(numKnots.set("num knots", 8, 1, 10));
-	parameterGroup.add(randomize.set("randomize", true));
+	//parameterGroup.add(numPaths.set("num paths", 0, 1, 20));
+	//parameterGroup.add(numKnots.set("num knots", 8, 1, 10));
+	//parameterGroup.add(randomize.set("randomize", true));
 	parameterGroup.add(generateAttractor.set("generate attractor", false));
 	parameterGroup.add(useAttractor.set("use attractor", false));
 	parameterGroup.add(drawKnots.set("draw Knots", false));
-	parameterGroup.add(fader.set("fade particles", 0.755, 0,1));
+	//parameterGroup.add(fader.set("fade particles", 0.755, 0,1));
 	
 
 	//feste Werte aus Gui
@@ -47,9 +47,13 @@ void ParticleSystem::setup()
 	maxSpeed = 0.035;
 	ratio = 0.05;
 	distanceThreshold = 0;
+	numKnots = 9;
+	randomize = true;
+	numSplitlists = 3;
+	fader = 0.755;
 
-	parameterGroup.add(numSplitlists.set("num spits", 2, 0, 20));
-	parameterGroup.add(splitSlider.set("splitknot position", 0,  0, 3));
+	//parameterGroup.add(numSplitlists.set("num spits", 2, 0, 20));
+	//parameterGroup.add(splitSlider.set("splitknot position", 0,  0, 3));
 	gui.setup(parameterGroup);
 
 	int w = ofGetWidth();
@@ -96,7 +100,7 @@ void ParticleSystem::update()
 		minSpeed = 0.035;
 		maxSpeed = 0.095;
 		ratio = 0.38;
-		distanceThreshold = 68;
+		distanceThreshold = 45;
 	}
 
 	/*
@@ -309,7 +313,7 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 			pathsplit = paths[p];
 
 			//---------------------------------------------------------------------
-			for (int k = pathsplit.size() / 2 + splitSlider; k < pathsplit.size(); k++) {
+			for (int k = pathsplit.size() / 2 ; k < pathsplit.size(); k++) {
 				ofVec2f r(pathsplit[k - 1].x, pathsplit[k - 1].y);
 				pathsplit[k].rotate(ofRandom(5, 55), r);
 			}
@@ -320,7 +324,7 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 			vector<ofVec2f> pathsplit2;
 			pathsplit2 = paths[p];
 
-			for (int k = pathsplit.size() / 2 + splitSlider; k < pathsplit.size(); k++) {
+			for (int k = pathsplit.size() / 2 ; k < pathsplit.size(); k++) {
 
 				ofVec2f r(pathsplit2[k - 1].x, pathsplit2[k - 1].y);
 				pathsplit2[k].rotate(ofRandom(-55, -5), r);
