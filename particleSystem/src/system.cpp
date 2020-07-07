@@ -20,27 +20,12 @@ ParticleSystem::~ParticleSystem()
 void ParticleSystem::setup()
 {
 	particles.clear();
-
-	
-
-	//Gui generierung
-	//parameterGroup.add(rate.set("rate", 1,0,10));
-	//parameterGroup.add(lifeTime.set("lifetime", 8.5, 0, 25));
-	//parameterGroup.add(minSpeed.set("min speed", 0.1, 0, 1));
-	//parameterGroup.add(maxSpeed.set("max speed", 0.055, 0, 1));
-	//parameterGroup.add(ratio.set("vel ratio", 0.53, 0, 1));
-	//parameterGroup.add(distanceThreshold.set("distance threshold", 45, 0, 100));
-	
-	//parameterGroup.add(numPaths.set("num paths", 0, 1, 20));
-	//parameterGroup.add(numKnots.set("num knots", 8, 1, 10));
-	//parameterGroup.add(randomize.set("randomize", true));
 	parameterGroup.add(generateAttractor.set("generate attractor", false));
 	parameterGroup.add(useAttractor.set("use attractor", false));
 	parameterGroup.add(drawKnots.set("draw Knots", false));
-	//parameterGroup.add(fader.set("fade particles", 0.755, 0,1));
-	
+	gui.setup(parameterGroup);
 
-	//feste Werte aus Gui
+	//festegelegte Werte aus Gui
 	rate = 3;
 	lifeTime = 1;
 	minSpeed = 0.025;
@@ -51,10 +36,6 @@ void ParticleSystem::setup()
 	randomize = true;
 	numSplitlists = 3;
 	fader = 0.755;
-
-	//parameterGroup.add(numSplitlists.set("num spits", 2, 0, 20));
-	//parameterGroup.add(splitSlider.set("splitknot position", 0,  0, 3));
-	gui.setup(parameterGroup);
 
 	int w = ofGetWidth();
 	int h = ofGetHeight();
@@ -95,8 +76,6 @@ void ParticleSystem::setup()
 void ParticleSystem::update()
 {
 	
-	
-	
 	//fix values
 	if (useAttractor) {
 		lifeTime = 13.125;
@@ -118,7 +97,6 @@ void ParticleSystem::update()
 		ratio = 0.65;
 	}
 	*/
-
 
 	// Parameter timestep: the time in seconds between the current and the previous callings of this function.
 	// Will be used for Particle:update(float timestep) Methode
@@ -181,25 +159,26 @@ void ParticleSystem::update()
 
 void ParticleSystem::draw()
 {
-	ofBackground(0); 
+
 	ofFill();
 	
 	fbo.begin();
 	ofEnableAlphaBlending();
+	
 	float alpha = (1 - fader) * 255;
-	ofSetColor(0, 0, 0, alpha);
-	ofFill();
-	ofRect(0, 0, ofGetWidth(), ofGetHeight());
+	ofColor colorOne(0, 0, 0, alpha);
+	ofColor colorTwo(15, 46, 61, alpha);
+	ofBackgroundGradient(colorTwo, colorOne, OF_GRADIENT_CIRCULAR);
+
 	ofDisableAlphaBlending();
 
+	//ofNoFill();
+	//for (int i = 1; i <= numKnots; i++) {
+	//	ofSetColor(50, 70, 108);
+	//	if (useAttractor == true) { ofSetColor(48);}
+	//	ofDrawCircle(ofGetWidth() / 2, ofGetHeight() / 2, ((float)i / numKnots)*(ofGetWidth() / 2));
 
-	ofNoFill();
-	for (int i = 1; i <= numKnots; i++) {
-		ofSetColor(50, 70, 108);
-		if (useAttractor == true) { ofSetColor(48);}
-		ofDrawCircle(ofGetWidth() / 2, ofGetHeight() / 2, ((float)i / numKnots)*(ofGetWidth() / 2));
-
-	}
+	//}
 
 	ofFill();
 	ofEnableAlphaBlending();
@@ -208,7 +187,7 @@ void ParticleSystem::draw()
 	}
 	ofDisableAlphaBlending();
 	fbo.end();
-	//ofSetColor(255, 255, 255);
+	
 	fbo.draw(0, 0);
 
 	gui.draw();

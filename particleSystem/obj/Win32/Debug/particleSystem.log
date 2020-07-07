@@ -1,21 +1,19 @@
 ﻿  main.cpp
   ofApp.cpp
   system.cpp
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(143): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(147): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(158): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(206): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(218): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(219): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(192): warning C4996: 'ofRect': Use ofDrawRectangle instead
-  c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\libs\openframeworks\graphics\ofgraphics.h(512): note: see declaration of 'ofRect'
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(259): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(281): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(317): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(325): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(336): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(350): warning C4018: '<': signed/unsigned mismatch
-c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(351): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(122): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(126): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(137): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(186): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(198): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(199): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(239): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(261): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(297): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(305): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(316): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(330): warning C4018: '<': signed/unsigned mismatch
+c:\users\eva\documents\uni\projekt\of_v0.11.0_vs2017_release\apps\myapps\particlesystem\src\system.cpp(331): warning C4018: '<': signed/unsigned mismatch
   particleSystem.vcxproj -> C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\apps\myApps\particleSystem\bin\particleSystem_debug.exe
   
   	                   2	C:\Users\Eva\Documents\Uni\Projekt\of_v0.11.0_vs2017_release\libs\fmodex\lib\vs\Win32\
