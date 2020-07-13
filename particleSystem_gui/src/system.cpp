@@ -21,28 +21,26 @@ void ParticleSystem::setup()
 {
 	particles.clear();
 
-	
 
-	//Gui generierung
+	///Gui Generierung
+	//Gui Partikelwerte 
 	parameterGroup.add(rate.set("rate", 1,0,10));
 	parameterGroup.add(lifeTime.set("lifetime", 13.125, 0, 20));
 	parameterGroup.add(minSpeed.set("min speed", 0.015, 0, 1));
 	parameterGroup.add(maxSpeed.set("max speed", 0.065, 0, 1));
 	parameterGroup.add(ratio.set("vel ratio", 0.345, 0, 1));
 	parameterGroup.add(distanceThreshold.set("distance threshold", 68, 0, 100));
-	
-	parameterGroup.add(numPaths.set("num paths", 0, 1, 20));
+	//Gui Systemwerte
 	parameterGroup.add(numKnots.set("num knots", 8, 1, 10));
 	parameterGroup.add(randomize.set("randomize", true));
 	parameterGroup.add(generateAttractor.set("generate attractor", false));
 	parameterGroup.add(useAttractor.set("use attractor", false));
-	parameterGroup.add(drawKnots.set("draw Knots", false));
 	parameterGroup.add(fader.set("fade particles", 0.795, 0,1));
 	
-
-	parameterGroup.add(numSplitlists.set("num spits", 2, 0, 20));
+	parameterGroup.add(numSplitlists.set("num splits", 2, 0, 20));
 	parameterGroup.add(splitSlider.set("splitknot position", 0,  0, 3));
 	gui.setup(parameterGroup);
+
 
 	int w = ofGetWidth();
 	int h = ofGetHeight();
@@ -51,14 +49,16 @@ void ParticleSystem::setup()
 	fbo.begin();
 	fbo.end();
 	
-
+	///festgelegte Endpunktliste 
+	//um Pfade zu generieren zu denen sich die Partikel von der Mitte aus bewegen.
 	ofVec2f endKnotA(200, -10);
 	ofVec2f endKnotB(950, -70);
 	ofVec2f endKnotC(1700, -10);
 	ofVec2f endKnotD(200, ofGetHeight()+10);
 	ofVec2f endKnotE(800, ofGetHeight()+100);
 	ofVec2f endKnotF(1800, ofGetHeight()+10);
-
+	
+	//Endpunkte der Pfade
 	endpointList.push_back(endKnotA);
 	endpointList.push_back(endKnotB);
 	endpointList.push_back(endKnotC);
@@ -73,9 +73,6 @@ void ParticleSystem::setup()
 	emitterList = image2List(&emitterImage);
 	//generate random attractor once
 	generateAttractors(numKnots, endpointList);
-	
-	
-
 }
 
 //-------------------------------------------------------------------
@@ -136,55 +133,42 @@ void ParticleSystem::update()
 }
 
 //-------------------------------------------------------------------
-
+//void ParticleSystem::draw():
+//Es werden die trails der Partikel durch fbo durch 'fading-texture' angezeigt
+//Der Hintergrund hat einen Gradienten (Verlauf von Mitte dunkelblau zu Aussen schwarz)
+//Die Partikel werden gezeichnet
+//Die Gui wird gezeichnet 
+//Partikelanzahl und fps werden ausgegeben
 void ParticleSystem::draw()
 {
 	ofBackground(0); 
-	ofFill();
 	
 	fbo.begin();
 	ofEnableAlphaBlending();
 	float alpha = (1 - fader) * 255;
-	ofSetColor(0, 0, 0, alpha);
-	ofFill();
-	ofRect(0, 0, ofGetWidth(), ofGetHeight());
+
+	ofColor colorOne(0, 0, 0, alpha);
+	ofColor colorTwo(40, 71, 86, alpha);
+	ofBackgroundGradient(colorTwo, colorOne, OF_GRADIENT_CIRCULAR);
+
 	ofDisableAlphaBlending();
-
-
-	ofNoFill();
-	for (int i = 1; i <= numKnots; i++) {
-		ofSetColor(50, 70, 108);
-		if (useAttractor == true) { ofSetColor(48);}
-		ofDrawCircle(ofGetWidth() / 2, ofGetHeight() / 2, ((float)i / numKnots)*(ofGetWidth() / 2));
-
-	}
 
 	ofFill();
 	ofEnableAlphaBlending();
+
 	for (int i = 0; i < particles.size(); i++) {
 		particles[i]->draw();
 	}
 	ofDisableAlphaBlending();
 	fbo.end();
-	//ofSetColor(255, 255, 255);
 	fbo.draw(0, 0);
 
 	gui.draw();
-
-	ofFill();
-	if (drawKnots) {
-		for (int p = 0; p < paths.size(); p++) {
-			for (int k = 0; k < paths[p].size(); k++) {
-				ofDrawCircle(paths[p][k], 2);
-			}
-		}
-	}
 
 	ofSetColor(255, 0, 255);
 	ofDrawBitmapString("NumParticles: " + ofToString(particles.size()), 10, 10);
 	ofDrawBitmapString("fps: " + ofToString(ofGetFrameRate()), 10, 20);
 	ofSetColor(255);
-
 }
 
 //-----------------------------------------------------------------------------
@@ -212,6 +196,7 @@ if (col.length()) {//any color except black
 		}
 	}
 
+	//Bild zentrieren durch die Emitterliste
 	if ((w < ofGetWidth()) && (h < ofGetHeight())) {
 		for (int i = 0; i < list.size(); i++) {
 			float calX = (ofGetWidth() - w) / 2;
@@ -220,18 +205,16 @@ if (col.length()) {//any color except black
 			list[i].y += calY;
 		}
 	}
-
 	return list;
 }
 
 //-----------------------------------------------------------------------------
-//void ParticleSystem::generateAttractors(int numPaths, int numKnotsperPath, vector<ofVec2f> endpointList)
-
+///void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> endpoints):
+//Zur Generierung der Pfadliste mit Unterpfaden
 void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> endpoints)
 {
-	//liste mit Unterpfaden 
+	///Liste aller Pfade 
 	paths.clear();
-	//int si_l = endpoints.size() * 3;
 
 	ofVec2f mid(ofGetWidth() / 2, ofGetHeight() / 2);
 
@@ -254,7 +237,6 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 			ofVec2f step = mid.getInterpolated(endKnot, iteration);
 			ofVec2f knot(step.x, step.y);
 
-
 			if (randomize) {
 				//fixierter Endpoint, damit die Partikel zum Bildrand gelangen können 
 				if (k < numKnotsperPath-1 && k > 0) {
@@ -262,30 +244,26 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 					knot.rotate(ofRandom(-40, 40), pri);
 				}
 			}
-		
 			knots.push_back(knot);
 		}
-
-		
 		paths.push_back(knots);
 	}
 
 	for (int s = 0; s < numSplitlists; s++) {
 		for (int p = 0; p < endpoints.size(); p++) {
-
-			//copy path for branching
-			//left
+			//---------------------------------------------------------------------
+			///Kopieren des Pfades zur Verzweigung
+			//linksseitig vom Hauptpfad
 			vector<ofVec2f> pathsplit;
 			pathsplit = paths[p];
 
-			//---------------------------------------------------------------------
 			for (int k = pathsplit.size() / 2 + splitSlider; k < pathsplit.size(); k++) {
 				ofVec2f r(pathsplit[k - 1].x, pathsplit[k - 1].y);
 				pathsplit[k].rotate(ofRandom(5, 55), r);
 			}
-
-			//copy path for branching
-			//right
+			//---------------------------------------------------------------------
+			///Kopieren des Pfades zur Verzweigung
+			//rechtsseitig vom Hauptpfad
 
 			vector<ofVec2f> pathsplit2;
 			pathsplit2 = paths[p];
@@ -295,16 +273,14 @@ void ParticleSystem::generateAttractors(int numKnotsperPath, vector<ofVec2f> end
 				ofVec2f r(pathsplit2[k - 1].x, pathsplit2[k - 1].y);
 				pathsplit2[k].rotate(ofRandom(-55, -5), r);
 			}
-
+			//----------------------------------------------------------------------
 			paths.push_back(pathsplit);
 			paths.push_back(pathsplit2);
-
 		}
 	}
 
-	cout << numPaths << "_"<<numKnotsperPath << endl;
-
-	for (int r = 0; r < paths.size(); r++) { //print all paths
+	for (int r = 0; r < paths.size(); r++) { 
+		//print all paths
 		for (int k = 0; k < paths[r].size(); k++) {
 			cout << "path: " << r << " knot: " << k << " x: " << paths[r][k].x << " y: " << paths[r][k].y << endl;
 		}
